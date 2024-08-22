@@ -45,3 +45,46 @@ func (db *DB) LoadDB() (DBStructure, error) {
 
 	return dbStructure, nil
 }
+
+func (db *DB) ResetDB() error {
+	err := os.Remove(db.path)
+	if errors.Is(err, ErrNotExist) {
+		return nil
+	}
+
+	return db.ensureDB()
+}
+
+func (db *DB) WriteDB(dbStructure DBStructure) error {
+	db.mu.Lock()
+	defer db.mu.Unlock()
+
+	dat, err := json.Marshal(dbStructure)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(db.path, dat, 0600)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (db *DB) createDB() error {
+	dbStructure := DBStructure{
+		Recipe: map[int]Recipe{},
+	}
+
+	return db.WriteDB(dbStructure)
+}
+
+func (db *DB) ensureDB() error {
+	_, err := os.ReadFile(db.path)
+	if errors.Is(err, ErrNotExist) {
+		return db.createDB()
+	}
+
+	return err
+}
