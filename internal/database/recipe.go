@@ -24,7 +24,10 @@ func (db *DB) CreateRecipe(name, base, temp string, ingredients []string) (Recip
 	}
 
 	dbStructure.Recipe[id] = recipe
-	db.WriteDB(dbStructure)
+	err = db.WriteDB(dbStructure)
+	if err != nil {
+		return Recipe{}, err
+	}
 
 	return recipe, nil
 }
