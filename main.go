@@ -44,6 +44,7 @@ func main() {
 	mux.Handle("/app/*", fsHandler)
 
 	mux.HandleFunc("POST /api/recipes", apiCfg.handlerRecipeCreate)
+	mux.HandleFunc("GET /api/recipes/{recipeID}", apiCfg.handlerRecipeGet)
 
 	mux.HandleFunc("GET /admin/metrics", apiCfg.handlerMetrics)
 
