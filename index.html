@@ -1,13 +1,99 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="styles.css" />
         <Title> Mais La Menu </Title>
     </head>
+
     <body>
-        <h1>Mais La Coffee and Tea Bar</h1>
+        <div>
+            <h1> Mais La Coffee and Tea Bar</h1>
+        </div>
+        <div>
+            <img src="Menu.JPG" alt="menu">
+        </div>
+        <div>
+            <form id="createForm">
+                <label for="name">Name:</label><br>
+                <input type="text" id="name", name="name"><br>
+                <label for="base">Base:</label><br>
+                <input type="text" id="base", name="base"><br>
+                <label for="temp">Temp:</label><br>
+                <input type="text" id="temp", name="temp"><br>
+                <label for="ingredient">Ingredient:</label><br>
+                <input type="text" id="ingredient", name="ingredient"><br>
+                <input type="button", value="Submit", onclick="submitForm()"><br>
+            </form>
+
+            <div for="dataDisplay", id="dataDisplay"></div>
+            <script>
+                async function submitForm() {
+        try {
+            // Extract values from the form
+            let coffeeName = document.getElementById('name').value;
+            let coffeeBase = document.getElementById('base').value;
+            let coffeeTemp = document.getElementById('temp').value;
+            let coffeeIngredient = document.getElementById('ingredient').value;
+
+            // Create data object
+            let data = {
+                name: coffeeName,
+                base: coffeeBase,
+                temp: coffeeTemp,
+                ingredients: [coffeeIngredient]
+            };
+
+            // Send POST request using fetch
+            const response = await fetch('http://localhost:8080/api/recipe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            // Get the response data
+            data = await response.json();
+
+            // Display the created recipe data
+            console.log('Success', data);
+
+            const dataDisplay = document.getElementById("dataDisplay");
+            dataDisplay.innerHTML = '';
+
+            const titleDisplay = document.createElement("p");
+            titleDisplay.textContent = "Recipe Created:";
+            dataDisplay.appendChild(titleDisplay);
+
+            const idElement = document.createElement("p");
+            idElement.textContent = "ID: " + data["ID"];
+            dataDisplay.appendChild(idElement);
+
+            const nameElement = document.createElement("p");
+            nameElement.textContent = "Name: " + data["Name"];
+            dataDisplay.appendChild(nameElement);
+
+            const baseElement = document.createElement("p");
+            baseElement.textContent = "Base: " + data["Base"];
+            dataDisplay.appendChild(baseElement);
+
+            const tempElement = document.createElement("p");
+            tempElement.textContent = "Temp: " + data["Temp"];
+            dataDisplay.appendChild(tempElement);
+
+            const ingredientElement = document.createElement("p");
+            ingredientElement.textContent = "Ingredient: " + data["Ingredients"];
+            dataDisplay.appendChild(ingredientElement);
+
+            
+    } catch (error) {
+        console.log('Error:', error);
+        alert('An error occurred during submission.');
+    }
+}
+            </script>
+        </div>
     </body>
 </html>

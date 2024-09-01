@@ -5,6 +5,7 @@ import (
 	"log"
 	"mais_la/internal/database"
 	"net/http"
+	"os"
 
 	"github.com/joho/godotenv"
 )
@@ -28,7 +29,11 @@ func main() {
 	dbg := flag.Bool("debug", false, "Enable debug mode")
 	flag.Parse()
 	if dbg != nil && *dbg {
-		err := db.ResetDB()
+		err := os.Remove("recipes.html")
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = db.ResetDB()
 		if err != nil {
 			log.Fatal(err)
 		}

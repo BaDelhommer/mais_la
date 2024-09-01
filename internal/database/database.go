@@ -82,7 +82,7 @@ func (db *DB) createDB() error {
 
 func (db *DB) ensureDB() error {
 	_, err := os.ReadFile(db.path)
-	if errors.Is(err, ErrNotExist) {
+	if errors.Is(err, os.ErrNotExist) {
 		return db.createDB()
 	}
 
