@@ -46,7 +46,7 @@
             };
 
             // Send POST request using fetch
-            const response = await fetch('http://localhost:8080/api/recipe', {
+            const response = await fetch('http://localhost:8080/api/recipes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -68,23 +68,23 @@
             dataDisplay.appendChild(titleDisplay);
 
             const idElement = document.createElement("p");
-            idElement.textContent = "ID: " + data["ID"];
+            idElement.textContent = "ID: " + data["id"];
             dataDisplay.appendChild(idElement);
 
             const nameElement = document.createElement("p");
-            nameElement.textContent = "Name: " + data["Name"];
+            nameElement.textContent = "Name: " + data["name"];
             dataDisplay.appendChild(nameElement);
 
             const baseElement = document.createElement("p");
-            baseElement.textContent = "Base: " + data["Base"];
+            baseElement.textContent = "Base: " + data["base"];
             dataDisplay.appendChild(baseElement);
 
             const tempElement = document.createElement("p");
-            tempElement.textContent = "Temp: " + data["Temp"];
+            tempElement.textContent = "Temp: " + data["temp"];
             dataDisplay.appendChild(tempElement);
 
             const ingredientElement = document.createElement("p");
-            ingredientElement.textContent = "Ingredient: " + data["Ingredients"];
+            ingredientElement.textContent = "Ingredient: " + data["ingredients"];
             dataDisplay.appendChild(ingredientElement);
 
             
@@ -93,6 +93,39 @@
         alert('An error occurred during submission.');
     }
 }
+            </script>
+        </div><br>
+        <div>
+            <input type="button" value="Submit" id="getRecipes" onclick="getRecipeList()"><br>
+            <ul id="recipeList"> Recipe List 
+
+            </ul>
+            <script>
+                async function getRecipeList() {
+                    try{
+                        const response = await fetch('http://localhost:8080/api/recipes');
+                        if (!response.ok) {
+                            throw new Error(`Response Status: ${response.status}`)
+                        };
+
+                        const json = await response.json();
+                        const recipeList = document.getElementById("recipeList")
+                        for (let key in json) {
+                            let data = {
+                                    name: json[key]["name"],
+                                    base: json[key]["base"],
+                                    temp: json[key]["temp"],
+                                    ingredients: json[key]["ingredients"]
+                            };
+                            let listItem = document.createElement("li")
+                            listItem.textContent = JSON.stringify(data)
+                            recipeList.appendChild(listItem)
+                        }
+                } catch(error) {
+                    console.log("Error: ", error)
+                    alert("Error occurred getting recipe list")
+                }
+            }
             </script>
         </div>
     </body>
