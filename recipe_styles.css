@@ -1,0 +1,17 @@
+div {
+    margin: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.container {
+    background-color: bisque;
+}
+
+.titleContainer {
+    text-align: center;
+}

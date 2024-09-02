@@ -3,130 +3,129 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="styles.css" />
+        <link rel="stylesheet" type="text/css" href="recipe_styles.css" />
         <Title> Mais La Menu </Title>
     </head>
 
     <body>
-        <div>
+        <div class="titleContainer">
             <h1> Mais La Coffee and Tea Bar</h1>
         </div>
-        <div>
-            <img src="Menu.JPG" alt="menu">
-        </div>
-        <div>
-            <form id="createForm">
-                <label for="name">Name:</label><br>
-                <input type="text" id="name", name="name"><br>
-                <label for="base">Base:</label><br>
-                <input type="text" id="base", name="base"><br>
-                <label for="temp">Temp:</label><br>
-                <input type="text" id="temp", name="temp"><br>
-                <label for="ingredient">Ingredient:</label><br>
-                <input type="text" id="ingredient", name="ingredient"><br>
-                <input type="button", value="Submit", onclick="submitForm()"><br>
-            </form>
+        <div class="container">
+            <div>
+                <form id="createForm">
+                    <label for="name">Name:</label><br>
+                    <input type="text" id="name", name="name"><br>
+                    <label for="base">Base:</label><br>
+                    <input type="text" id="base", name="base"><br>
+                    <label for="temp">Temp:</label><br>
+                    <input type="text" id="temp", name="temp"><br>
+                    <label for="ingredient">Ingredient:</label><br>
+                    <input type="text" id="ingredient", name="ingredient"><br>
+                    <input type="button", value="Submit", onclick="submitForm()"><br>
+                </form>
 
-            <div for="dataDisplay", id="dataDisplay"></div>
-            <script>
-                async function submitForm() {
-        try {
-            // Extract values from the form
-            let coffeeName = document.getElementById('name').value;
-            let coffeeBase = document.getElementById('base').value;
-            let coffeeTemp = document.getElementById('temp').value;
-            let coffeeIngredient = document.getElementById('ingredient').value;
+                <div for="dataDisplay", id="dataDisplay"></div>
+                <script>
+                    async function submitForm() {
+            try {
+                // Extract values from the form
+                let coffeeName = document.getElementById('name').value;
+                let coffeeBase = document.getElementById('base').value;
+                let coffeeTemp = document.getElementById('temp').value;
+                let coffeeIngredient = document.getElementById('ingredient').value;
 
-            // Create data object
-            let data = {
-                name: coffeeName,
-                base: coffeeBase,
-                temp: coffeeTemp,
-                ingredients: [coffeeIngredient]
-            };
+                // Create data object
+                let data = {
+                    name: coffeeName,
+                    base: coffeeBase,
+                    temp: coffeeTemp,
+                    ingredients: [coffeeIngredient]
+                };
 
-            // Send POST request using fetch
-            const response = await fetch('http://localhost:8080/api/recipes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+                // Send POST request using fetch
+                const response = await fetch('http://localhost:8080/api/recipes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
 
-            // Get the response data
-            data = await response.json();
+                // Get the response data
+                data = await response.json();
 
-            // Display the created recipe data
-            console.log('Success', data);
+                // Display the created recipe data
+                console.log('Success', data);
 
-            const dataDisplay = document.getElementById("dataDisplay");
-            dataDisplay.innerHTML = '';
+                const dataDisplay = document.getElementById("dataDisplay");
+                dataDisplay.innerHTML = '';
 
-            const titleDisplay = document.createElement("p");
-            titleDisplay.textContent = "Recipe Created:";
-            dataDisplay.appendChild(titleDisplay);
+                const titleDisplay = document.createElement("p");
+                titleDisplay.textContent = "Recipe Created:";
+                dataDisplay.appendChild(titleDisplay);
 
-            const idElement = document.createElement("p");
-            idElement.textContent = "ID: " + data["id"];
-            dataDisplay.appendChild(idElement);
+                const idElement = document.createElement("p");
+                idElement.textContent = "ID: " + data["id"];
+                dataDisplay.appendChild(idElement);
 
-            const nameElement = document.createElement("p");
-            nameElement.textContent = "Name: " + data["name"];
-            dataDisplay.appendChild(nameElement);
+                const nameElement = document.createElement("p");
+                nameElement.textContent = "Name: " + data["name"];
+                dataDisplay.appendChild(nameElement);
 
-            const baseElement = document.createElement("p");
-            baseElement.textContent = "Base: " + data["base"];
-            dataDisplay.appendChild(baseElement);
+                const baseElement = document.createElement("p");
+                baseElement.textContent = "Base: " + data["base"];
+                dataDisplay.appendChild(baseElement);
 
-            const tempElement = document.createElement("p");
-            tempElement.textContent = "Temp: " + data["temp"];
-            dataDisplay.appendChild(tempElement);
+                const tempElement = document.createElement("p");
+                tempElement.textContent = "Temp: " + data["temp"];
+                dataDisplay.appendChild(tempElement);
 
-            const ingredientElement = document.createElement("p");
-            ingredientElement.textContent = "Ingredient: " + data["ingredients"];
-            dataDisplay.appendChild(ingredientElement);
+                const ingredientElement = document.createElement("p");
+                ingredientElement.textContent = "Ingredient: " + data["ingredients"];
+                dataDisplay.appendChild(ingredientElement);
 
-            
-    } catch (error) {
-        console.log('Error:', error);
-        alert('An error occurred during submission.');
+                
+        } catch (error) {
+            console.log('Error:', error);
+            alert('An error occurred during submission.');
+        }
     }
-}
-            </script>
-        </div><br>
-        <div>
-            <input type="button" value="Submit" id="getRecipes" onclick="getRecipeList()"><br>
-            <ul id="recipeList"> Recipe List 
+                </script>
+            </div><br>
+            <div>
+                <input type="button" value="Submit" id="getRecipes" onclick="getRecipeList()"><br>
+                <ul id="recipeList"> Recipe List 
 
-            </ul>
-            <script>
-                async function getRecipeList() {
-                    try{
-                        const response = await fetch('http://localhost:8080/api/recipes');
-                        if (!response.ok) {
-                            throw new Error(`Response Status: ${response.status}`)
-                        };
-
-                        const json = await response.json();
-                        const recipeList = document.getElementById("recipeList")
-                        for (let key in json) {
-                            let data = {
-                                    name: json[key]["name"],
-                                    base: json[key]["base"],
-                                    temp: json[key]["temp"],
-                                    ingredients: json[key]["ingredients"]
+                </ul>
+                <script>
+                    async function getRecipeList() {
+                        try{
+                            const response = await fetch('http://localhost:8080/api/recipes');
+                            if (!response.ok) {
+                                throw new Error(`Response Status: ${response.status}`)
                             };
-                            let listItem = document.createElement("li")
-                            listItem.textContent = JSON.stringify(data)
-                            recipeList.appendChild(listItem)
-                        }
-                } catch(error) {
-                    console.log("Error: ", error)
-                    alert("Error occurred getting recipe list")
+
+                            const json = await response.json();
+                            const recipeList = document.getElementById("recipeList")
+                            for (let key in json) {
+                                let data = {
+                                        name: json[key]["name"],
+                                        base: json[key]["base"],
+                                        temp: json[key]["temp"],
+                                        ingredients: json[key]["ingredients"]
+                                };
+                                let listItem = document.createElement("li");
+                                listItem.textContent = JSON.stringify(data);
+                                recipeList.appendChild(listItem);
+                            }
+                    } catch(error) {
+                        console.log("Error: ", error)
+                        alert("Error occurred getting recipe list")
+                    }
                 }
-            }
-            </script>
+                </script>
+            </div>
         </div>
     </body>
 </html>
