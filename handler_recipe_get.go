@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
 	"strconv"
 )
@@ -49,16 +48,4 @@ func (cfg *apiConfig) handlerGetAllRecipes(w http.ResponseWriter, r *http.Reques
 	}
 
 	respondWithJson(w, http.StatusOK, recipes)
-}
-
-func (cfg *apiConfig) renderHTML(w http.ResponseWriter, path string) {
-	tmpl, err := template.New(path).ParseFiles(path)
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "couldn't create template")
-	}
-
-	err = tmpl.Execute(w, tmpl)
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "couldn't execute template")
-	}
 }
