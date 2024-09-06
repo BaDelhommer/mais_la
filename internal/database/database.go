@@ -16,6 +16,7 @@ type DB struct {
 
 type DBStructure struct {
 	Recipe map[int]Recipe `json:"recipe"`
+	User   map[int]User   `json:"user"`
 }
 
 func NewDB(path string) (*DB, error) {
@@ -75,6 +76,7 @@ func (db *DB) WriteDB(dbStructure DBStructure) error {
 func (db *DB) createDB() error {
 	dbStructure := DBStructure{
 		Recipe: map[int]Recipe{},
+		User:   map[int]User{},
 	}
 
 	return db.WriteDB(dbStructure)
